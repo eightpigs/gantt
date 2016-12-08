@@ -18,7 +18,7 @@
                         <div class="val">{{y}}</div>
                         <div class="gantt-date-month" v-for="m in task.months[y]"  track-by="$index" >
                             <div class="val">{{ m }}月</div>
-                            <div class="gantt-date-day" v-for="i in getdaysByMonth(y,m)"  track-by="$index">{{ i+1+'日' }}</div>
+                            <div class="gantt-date-day" v-for="i in getdaysByMonth(y,m)" track-by="$index">{{ i+1 }}</div>
                         </div>
                     </div>
                 </div>
@@ -27,15 +27,13 @@
                         <div class="gantt-task-parent">
                             <div class="gantt-task-parent-val" style="margin-left:0px;">{{item.name}}</div>
                             <div class="gantt-task-item-date">
-                                <div class="gantt-date-day" v-for="i in getIntervalDay()"  track-by="$index"></div>
+                                <div class="gantt-date-day" v-for="i in getIntervalDay()" track-by="$index"></div>
                             </div>
                         </div>
                         <div class="gantt-task-item" v-for="sub in item.childrens" :index="$index" track-by="$index">
                             <div class="gantt-task-item-val" data-startTime="{{sub.startTime}}" data-endTime="{{sub.endTime}}" data-completedTime="{{sub.completedTime}}" data-milestones="{{jsontostring(sub.milestones)}}">{{sub.name}}</div>
                             <div class="gantt-task-item-date">
-                                <div class="gantt-date-day" v-for="i in getIntervalDay()" track-by="$index">
-                                    
-                                </div>
+                                <div class="gantt-date-day" v-for="i in getIntervalDay()" track-by="$index"></div>
                             </div>
                         </div>
                     </div>
@@ -49,7 +47,7 @@
     var task = {
         "days":591,
         "months":{
-            "2016":["01","02","03","04","05","06","07","08","09","10","11","12"]
+            "2016":["05","06","07","08","09","10","11","12"]
         },
         "years":["2016"],
         "projects":[
@@ -80,7 +78,21 @@
                         "name":"环境搭建",
                         "startTime":"2016-11-12",
                         "endTime":"2016-12-31",
-                        "completedTime":"2016-12-05" // 已完成的时间
+                        "completedTime":"2016-12-01", // 已完成的时间
+                        "milestones":[
+                            {
+                                "name":"里程碑任务1",
+                                "time":"2016-11-22"
+                            },
+                            {
+                                "name":"里程碑任务2",
+                                "time":"2016-12-04"
+                            },
+                            {
+                                "name":"里程碑任务3",
+                                "time":"2016-12-07"
+                            }
+                        ]
                     },
                     {
                         "name":"运维工作",
