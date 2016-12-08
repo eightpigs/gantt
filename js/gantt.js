@@ -62,7 +62,6 @@ var vue = new Vue({
 
 // Vue 渲染数据完成之后开始渲染具体里程碑以及项目的甘特图进度
 Vue.nextTick(function(){
-    console.info(nowDate);
     // 当前日期到最小日期的间隔天数
     var now_day = cal_Day(nowDate,minDate);
     // 基线
@@ -90,7 +89,7 @@ Vue.nextTick(function(){
         var end_day = cal_Day(endTime , minDate);
         // 已完成的距离最小时间的天数
         var complete_day = completedTime != "" ? cal_Day(completedTime,minDate) : 0;
-        console.info(complete_day);
+        
         // 从开始到结束进行绘制背景颜色
         for(var i in $(this).next().children()){
             if(i >= start_day && i <= end_day){ 
@@ -114,6 +113,8 @@ Vue.nextTick(function(){
                     
                 }else if(i == end_day){ // 如果是结束时间
                     nodeVal = "<div class=\"gantt-line\" style=\"margin-left:-1px; border-radius: 0px 4px 4px 0px; \">";
+                    // 结束日期
+                    nodeVal += "<div class=\"gantt-task-tiptext\" style=\"margin-left:30px;\">"+getMonthAndDay(endTime)+"</div>";
                 }else{  // 中间内容
                     nodeVal = "<div class=\"gantt-line\">"
                 }
@@ -133,9 +134,9 @@ Vue.nextTick(function(){
                         if(m > milestone_index){
                             // 第几格绘制里程碑
                             if(i == cal_Day(milestones[m].time,minDate)){
-                                var milestoneTipText = milestones[m].name+getMonthAndDay(milestones[m].time);
+                                var milestoneTipText = "["+milestones[m].name+"] "+getMonthAndDay(milestones[m].time);
                                 // 生成里程碑节点
-                                nodeVal += "<div class=\"gantt-task-milestone\"><div class=\"gantt-task-milestone-tiptext\"> "+ milestoneTipText +" </div></div>";
+                                nodeVal += "<div class=\"gantt-task-milestone\"></div>"+"<div class=\"gantt-task-milestone-tiptext\"> "+ milestoneTipText +" </div>";
                                 // 成功添加一个后，下标加1
                                 milestone_index++;
                             }
@@ -164,20 +165,24 @@ Vue.nextTick(function(){
 });
 
 $(function(){
+    // 将图片转为canvas
     $(".download").click(function(){
-
         html2canvas(document.body, {
             onrendered: function(canvas) {
-                // document.body.appendChild(canvas);
                 document.getElementById("imgbox").appendChild(canvas);
             }
         });
+        // 延迟一秒下载图片
         setTimeout(download_img,1000);    
     });     
 });
 
+
+// 下载图片
 function download_img(){
     var canvas = $("#imgbox").children()[0];
     var image = canvas.toDataURL("image/png").replace("image/png", "image/octet-stream");
     window.location.href = image;
+    // 删除
+    $("#imgbox").children()[0].remove();
 }
